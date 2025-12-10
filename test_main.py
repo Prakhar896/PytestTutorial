@@ -1,13 +1,15 @@
 import pytest
-from main import get_weather
+from main import APIClient, UserService
 
-def test_get_weather(mocker):
-    mock_get = mocker.patch('main.requests.get')
+def test_get_username_with_mock(mocker):
+    mock_api_client = mocker.Mock(spec=APIClient) # Mock a whole class specification
     
-    mock_get.return_value.status_code = 200
-    mock_get.return_value.json.return_value = {"temperature": 25, "condition": "Sunny"}
+    mock_api_client.get_user_data.return_value = {"id": 1, "name": "Alice"}
     
-    result = get_weather("Dubai")
+    service = UserService(mock_api_client)
     
-    assert result == {"temperature": 25, "condition": "Sunny"}
-    mock_get.assert_called_once_with("https://api.weather.com/v1/Dubai")
+    result = service.get_username(1)
+    
+    assert result == "ALICE"
+    mock_api_client.get_user_data.assert_called_once_with(1) # Ensure correct API call
+
