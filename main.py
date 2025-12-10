@@ -1,13 +1,15 @@
-class UserManager:
+class Database:
     def __init__(self):
-        self.users = {}
+        self.data = {}
     
-    def add_user(self, username, email):
-        if username in self.users:
+    def add_user(self, user_id, name):
+        if user_id in self.data:
             raise ValueError("User already exists")
-        self.users[username] = email
-        return True
+        self.data[user_id] = name
     
-    def get_user(self, username):
-        return self.users.get(username)
-
+    def get_user(self, user_id):
+        return self.data.get(user_id)
+    
+    def delete_user(self, user_id):
+        if user_id in self.data:
+            del self.data[user_id]
